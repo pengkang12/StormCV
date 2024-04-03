@@ -44,7 +44,7 @@
 		</repository>
 		<repository>
 			<id>xuggle repo</id>
-			<url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+			<url>https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
 		</repository>
 	</repositories>
 	<dependencies>
