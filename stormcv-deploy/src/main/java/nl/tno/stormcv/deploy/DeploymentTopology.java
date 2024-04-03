@@ -7,6 +7,8 @@ import nl.tno.stormcv.StormCVConfig;
 import nl.tno.stormcv.batcher.SlidingWindowBatcher;
 import nl.tno.stormcv.bolt.BatchInputBolt;
 import nl.tno.stormcv.bolt.SingleInputBolt;
+import nl.tno.stormcv.fetcher.FileFrameFetcher;
+import nl.tno.stormcv.fetcher.ImageFetcher;
 import nl.tno.stormcv.fetcher.StreamFrameFetcher;
 import nl.tno.stormcv.model.Frame;
 import nl.tno.stormcv.model.serializer.FrameSerializer;
@@ -45,7 +47,7 @@ public static void main(String[] args){
 		conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS , 10); // The maximum amount of time given to the topology to fully process a message emitted by a spout (default = 30)
 		conf.put(StormCVConfig.STORMCV_SPOUT_FAULTTOLERANT, false); // indicates if the spout must be fault tolerant; i.e. spouts do NOT! replay tuples on fail
 		conf.put(StormCVConfig.STORMCV_CACHES_TIMEOUT_SEC, 30); // TTL (seconds) for all elements in all caches throughout the topology (avoids memory overload)
-		
+		/* 
 		List<String> urls = new ArrayList<String>();
 		urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
 		urls.add("rtsp://streaming3.webcam.nl:1935/n233/n233.stream");
@@ -53,6 +55,10 @@ public static void main(String[] args){
 		urls.add("rtsp://streaming3.webcam.nl:1935/n346/n346.stream");
 		urls.add("rtsp://streaming3.webcam.nl:1935/n319/n319.stream"); 
 		urls.add("rtsp://streaming3.webcam.nl:1935/n794b/n794b.stream"); 
+		*/
+		String userDir = System.getProperty("user.dir").replaceAll("\\\\", "/");
+		List<String> urls = new ArrayList<String>();
+		urls.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data/The_Nut_Job_trailer.mp4" );
 
 		int frameSkip = 13;
 		
@@ -68,8 +74,10 @@ public static void main(String[] args){
 		TopologyBuilder builder = new TopologyBuilder();
 				
 		// number of tasks must match the number of urls!
-		builder.setSpout("spout", new CVParticleSpout( new StreamFrameFetcher(urls).frameSkip(frameSkip) ), 1 ).setNumTasks(6);
-		
+		// builder.setSpout("spout", new CVParticleSpout( new StreamFrameFetcher(urls).frameSkip(frameSkip) ), 1 ).setNumTasks(6);
+		builder.setSpout("spout", new CVParticleSpout( new FileFrameFetcher(urls).frameSkip(frameSkip).groupSize(2) ), 1 ).setNumTasks(1);
+
+
 		// three 'fat' bolts containing a SequentialFrameOperation will will emit a Frame object containing the detected features
 		builder.setBolt("features", new SingleInputBolt( new SequentialFrameOp(operations).outputFrame(true).retainImage(true)), 2)
 			.shuffleGrouping("spout");
@@ -82,7 +90,6 @@ public static void main(String[] args){
 			.shuffleGrouping("features");
 		
 		try {
-			
 			// run in local mode
 			/*
 			LocalCluster cluster = new LocalCluster();
