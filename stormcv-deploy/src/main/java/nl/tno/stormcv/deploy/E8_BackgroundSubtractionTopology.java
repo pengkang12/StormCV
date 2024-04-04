@@ -12,6 +12,7 @@ import nl.tno.stormcv.bolt.BatchInputBolt;
 import nl.tno.stormcv.bolt.SingleInputBolt;
 import nl.tno.stormcv.deploy.util.BackgroundSubtractionOp;
 import nl.tno.stormcv.deploy.util.BackgroundSubtractionOp.BSAlgorithm;
+import nl.tno.stormcv.fetcher.FileFrameFetcher;
 import nl.tno.stormcv.fetcher.StreamFrameFetcher;
 import nl.tno.stormcv.model.Frame;
 import nl.tno.stormcv.model.serializer.FrameSerializer;
@@ -54,8 +55,11 @@ public class E8_BackgroundSubtractionTopology
 
 		// taking two live webcam streams from http://webcam.prvgld.nl/
 		List<String> urls = new ArrayList<String>();
-		urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
-		urls.add( "rtsp://streaming3.webcam.nl:1935/n233/n233.stream" );
+		//urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
+		//urls.add( "rtsp://streaming3.webcam.nl:1935/n233/n233.stream" );
+		String userDir = System.getProperty("user.dir").replaceAll("\\\\", "/");
+		urls.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data/The_Nut_Job_trailer.mp4" );
+		urls.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data/The_Nut_Job_trailer.mp4" );
 
 		int frameSkip = 13;
 
@@ -63,7 +67,8 @@ public class E8_BackgroundSubtractionTopology
 		TopologyBuilder builder = new TopologyBuilder();
 
 		// just one spout reading streams; i.e. this spout reads two streams in parallel
-		builder.setSpout("spout", new CVParticleSpout( new StreamFrameFetcher(urls).frameSkip(frameSkip) ), 1 );
+		//builder.setSpout("spout", new CVParticleSpout( new StreamFrameFetcher(urls).frameSkip(frameSkip) ), 1 );
+		builder.setSpout("spout", new CVParticleSpout( new FileFrameFetcher(urls).frameSkip(frameSkip).groupSize(2) ), 1 ).setNumTasks(1);
 
 		// add bolt that does background subtraction (choose MOG or MOG2 as algorithm)
 		builder.setBolt("backgroundsubtraction", new SingleInputBolt( new BackgroundSubtractionOp().setAlgorithm(BSAlgorithm.MOG)), 1)

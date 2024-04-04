@@ -7,6 +7,7 @@ import nl.tno.stormcv.StormCVConfig;
 import nl.tno.stormcv.batcher.SlidingWindowBatcher;
 import nl.tno.stormcv.bolt.BatchInputBolt;
 import nl.tno.stormcv.fetcher.FetchAndOperateFetcher;
+import nl.tno.stormcv.fetcher.FileFrameFetcher;
 import nl.tno.stormcv.fetcher.StreamFrameFetcher;
 import nl.tno.stormcv.model.Frame;
 import nl.tno.stormcv.model.serializer.FrameSerializer;
@@ -35,7 +36,7 @@ public class E7_FetchOperateCombiTopology {
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "mac64_opencv_java248.dylib");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
 		
 		conf.setNumWorkers(3); // number of workers in the topology
 		conf.setMaxSpoutPending(32); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
@@ -44,11 +45,14 @@ public class E7_FetchOperateCombiTopology {
 		conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS , 10); // The maximum amount of time given to the topology to fully process a message emitted by a spout (default = 30)
 		conf.put(StormCVConfig.STORMCV_SPOUT_FAULTTOLERANT, false); // indicates if the spout must be fault tolerant; i.e. spouts do NOT! replay tuples on fail
 		conf.put(StormCVConfig.STORMCV_CACHES_TIMEOUT_SEC, 30); // TTL (seconds) for all elements in all caches throughout the topology (avoids memory overload)
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "mac64_opencv_java248.dylib"); // sets the opencv lib to be used by all OpenCVOperation implementing operations
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so"); // sets the opencv lib to be used by all OpenCVOperation implementing operations
 		
 		List<String> urls = new ArrayList<String>();
-		urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
-		urls.add("rtsp://streaming3.webcam.nl:1935/n233/n233.stream");
+		//urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
+		//urls.add("rtsp://streaming3.webcam.nl:1935/n233/n233.stream");
+		String userDir = System.getProperty("user.dir").replaceAll("\\\\", "/");
+		urls.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data/Breaking_Dawn_Part2_trailer.mp4" );
+		//urls.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data/The_Nut_Job_trailer.mp4" );
 
 		@SuppressWarnings("rawtypes")
 		List<ISingleInputOperation> operations = new ArrayList<ISingleInputOperation>();
@@ -60,11 +64,12 @@ public class E7_FetchOperateCombiTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("spout", new CVParticleSpout( 
 				new FetchAndOperateFetcher( // use a meta fetcher to combine a Fetcher and Operation
-						new StreamFrameFetcher(urls).frameSkip(frameSkip), // use a normal fetcher to get video frames from streams
+						//new StreamFrameFetcher(urls).frameSkip(frameSkip), // use a normal fetcher to get video frames from streams
+						new FileFrameFetcher(urls).frameSkip(frameSkip), 
 						new SequentialFrameOp(operations).outputFrame(true).retainImage(true) // use a sequential operation to execute a number of operations on frames
 					)
 				) , 2 );
-		
+
 		// add bolt that creates a webservice on port 8558 enabling users to view the result
 		builder.setBolt("streamer", new BatchInputBolt(
 				new SlidingWindowBatcher(2, frameSkip).maxSize(6), // note the required batcher used as a buffer and maintains the order of the frames
