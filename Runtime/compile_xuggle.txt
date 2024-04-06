@@ -1,0 +1,20 @@
+# use the modified code for xuggle
+# then run following command
+# download ivy-2.0.0.jar file to current folder
+
+# xuggle-xuggler is the source code folder
+
+export XUGGLE_HOME=$HOME/xuggler    
+export PATH=$XUGGLE_HOME/bin:$PATH    
+export LD_LIBRARY_PATH=$XUGGLE_HOME/lib:$LD_LIBRARY_PATH
+
+ant -Dbuild.configure.os=aarch64-unknown-linux-gnu stage
+ant -Dbuild.configure.os=aarch64-unknown-linux-gnu install
+
+# 1. The xuggler binaries would be installed at the location 'XUGGLE_HOME'.
+
+# 2. The xuggler maven repository for java binaries would be located at '/root/.m2/repository/xuggle/xuggle-xuggler'
+
+# 3. you can check out the '../xuggle-xuggler/dist' directory to check all the native and java binaries for your non-maven kind of use.
+
+# copy ./xuggle-xuggler/dist/lib/xuggle-xuggler.jar to $HOME/.m2/repository/xuggle/xuggle-xuggler/5.5/xuggle-xuggler-5.5.jar

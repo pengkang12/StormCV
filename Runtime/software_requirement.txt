@@ -1,0 +1,15 @@
+# Compile environment
+OS:
+    Linux jetson 4.9.253-tegra #1 SMP PREEMPT Sat Feb 19 08:59:22 PST 2022 aarch64 aarch64 aarch64 GNU/Linux
+compile tools:
+    cmake=3.10.2 # cmake < 3.12.0 because opencv 2.4 version only support python 2.7
+    python=2.7.17
+    g++=7.5
+    gcc=7.5
+    java=8 # don't use a higher version. It will cause some error unless you want to update all code. 
+    xuggle=5.5 # latest version, discontinued
+    opencv=2.4x
+    opencv_extra=2.4x
+Other software:
+    mvn=3.6.0
+
