@@ -18,6 +18,7 @@ import nl.tno.stormcv.spout.CVParticleSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.StormSubmitter;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
 
@@ -70,14 +71,14 @@ public class E1_GrayScaledTopology {
 		try {
 			
 			// run in local mode
-			LocalCluster cluster = new LocalCluster();
-			cluster.submitTopology( "grayscaled", conf, builder.createTopology() );
-			Utils.sleep(120*1000); // run for one minute and then kill the topology
-			cluster.shutdown();
-			System.exit(1);
+			//LocalCluster cluster = new LocalCluster();
+			//cluster.submitTopology( "grayscaled", conf, builder.createTopology() );
+			//Utils.sleep(120*1000); // run for one minute and then kill the topology
+			//cluster.shutdown();
+			//System.exit(1);
 			
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("grayscaled", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

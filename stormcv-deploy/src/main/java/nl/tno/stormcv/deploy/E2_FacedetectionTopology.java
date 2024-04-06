@@ -14,6 +14,7 @@ import nl.tno.stormcv.spout.CVParticleSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.StormSubmitter;
 import backtype.storm.utils.Utils;
 
 public class E2_FacedetectionTopology {
@@ -25,7 +26,7 @@ public class E2_FacedetectionTopology {
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so");
 		//conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "win64_opencv_java248.dll");
 		
 		conf.setNumWorkers(3); // number of workers in the topology
@@ -66,14 +67,15 @@ public class E2_FacedetectionTopology {
 		
 		try {
 			// run in local mode
+			/*
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology( "facedetection", conf, builder.createTopology() );
 			Utils.sleep(300*1000); // run for some time and then kill the topology
 			cluster.shutdown();
 			System.exit(1);
-			
+			*/
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("facedetection", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

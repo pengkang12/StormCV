@@ -21,6 +21,8 @@ import nl.tno.stormcv.spout.CVParticleSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.StormSubmitter;
+
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
 
@@ -33,7 +35,7 @@ public class E6_GroupOfFramesTopology {
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so");
 
 		conf.setNumWorkers(6); // number of workers in the topology
 		conf.setMaxSpoutPending(32); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
@@ -83,14 +85,15 @@ public class E6_GroupOfFramesTopology {
 		try {
 			
 			// run in local mode
+			/*
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology( "bigflow", conf, builder.createTopology() );
 			Utils.sleep(120*1000); // run for one minute and then kill the topology
 			cluster.shutdown();
 			System.exit(1);
-			
+			*/
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("bigflow", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

@@ -38,7 +38,7 @@ public static void main(String[] args){
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		//conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "mac64_opencv_java248.dylib");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so");
 		
 		conf.setNumWorkers(4); // number of workers in the topology
 		conf.setMaxSpoutPending(20); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
@@ -99,7 +99,7 @@ public static void main(String[] args){
 			System.exit(1);
 			*/
 			// run on a storm cluster
-			StormSubmitter.submitTopology("Your_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("deployment_Test", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

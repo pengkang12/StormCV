@@ -24,6 +24,7 @@ import org.opencv.features2d.FeatureDetector;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
@@ -38,7 +39,7 @@ public class E4_SequentialFeaturesTopology {
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so");
 		
 		conf.setNumWorkers(8); // number of workers in the topology
 		conf.setMaxSpoutPending(6); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
@@ -88,14 +89,15 @@ public class E4_SequentialFeaturesTopology {
 		try {
 			
 			// run in local mode
+			/*
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology( "fatfeature", conf, builder.createTopology() );
 			Utils.sleep(120*1000); // run for two minutes and then kill the topology
 			cluster.shutdown();
 			System.exit(1);
-			
+			*/
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("fatfeature", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

@@ -35,7 +35,7 @@ public class E8_DRPCTopology {
 		// first some global (topology configuration)
 		StormCVConfig conf = new StormCVConfig();
 
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "mac64_opencv_java248.dylib");
+		//conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
 				
 		conf.setNumWorkers(5); // number of workers in the topology
 		conf.put(StormCVConfig.STORMCV_FRAME_ENCODING, Frame.JPG_IMAGE); // indicates frames will be encoded as JPG throughout the topology (JPG is the default when not explicitly set)
@@ -48,7 +48,7 @@ public class E8_DRPCTopology {
 		String userDir = System.getProperty("user.dir").replaceAll("\\\\", "/");
 				
 		List<String> prototypes = new ArrayList<String>();
-		prototypes.add( "file://"+ userDir +"/resources/data" );
+		prototypes.add( "file://"+ userDir +"/StormCV/stormcv-examples/resources/data" );
 		
 		// create a linear DRPC builder called 'match'
 		LinearDRPCTopologyBuilder builder = new LinearDRPCTopologyBuilder("match");

@@ -23,6 +23,8 @@ import org.opencv.features2d.FeatureDetector;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
@@ -35,9 +37,7 @@ public class E7_FetchOperateCombiTopology {
 		
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
-		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
-		
+		 */		
 		conf.setNumWorkers(3); // number of workers in the topology
 		conf.setMaxSpoutPending(32); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
 		conf.put(StormCVConfig.STORMCV_FRAME_ENCODING, Frame.JPG_IMAGE); // indicates frames will be encoded as JPG throughout the topology (JPG is the default when not explicitly set)
@@ -45,7 +45,7 @@ public class E7_FetchOperateCombiTopology {
 		conf.put(Config.TOPOLOGY_MESSAGE_TIMEOUT_SECS , 10); // The maximum amount of time given to the topology to fully process a message emitted by a spout (default = 30)
 		conf.put(StormCVConfig.STORMCV_SPOUT_FAULTTOLERANT, false); // indicates if the spout must be fault tolerant; i.e. spouts do NOT! replay tuples on fail
 		conf.put(StormCVConfig.STORMCV_CACHES_TIMEOUT_SEC, 30); // TTL (seconds) for all elements in all caches throughout the topology (avoids memory overload)
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so"); // sets the opencv lib to be used by all OpenCVOperation implementing operations
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so"); // sets the opencv lib to be used by all OpenCVOperation implementing operations
 		
 		List<String> urls = new ArrayList<String>();
 		//urls.add( "rtsp://streaming3.webcam.nl:1935/n224/n224.stream" );
@@ -80,14 +80,15 @@ public class E7_FetchOperateCombiTopology {
 		try {
 			
 			// run in local mode
+			/*
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology( "sequential_spout", conf, builder.createTopology() );
 			Utils.sleep(120*1000); // run two minutes and then kill the topology
 			cluster.shutdown();
 			System.exit(1);
-			
+			*/
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("sequential_spout", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

@@ -24,6 +24,7 @@ import nl.tno.stormcv.spout.CVParticleSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.StormSubmitter;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
 
@@ -36,9 +37,9 @@ public class E3_MultipleFeaturesTopology {
 		/**
 		 * Sets the OpenCV library to be used which depends on the system the topology is being executed on
 		 */
-		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "linux64_opencv_java248.so");
+		conf.put(StormCVConfig.STORMCV_OPENCV_LIB, "libopencv_java2413.so");
 		
-		conf.setNumWorkers(8); // number of workers in the topology
+		conf.setNumWorkers(7); // number of workers in the topology
 		conf.setMaxSpoutPending(32); // maximum un-acked/un-failed frames per spout (spout blocks if this number is reached)
 		conf.put(StormCVConfig.STORMCV_FRAME_ENCODING, Frame.JPG_IMAGE); // indicates frames will be encoded as JPG throughout the topology (JPG is the default when not explicitly set)
 		conf.put(Config.TOPOLOGY_ENABLE_MESSAGE_TIMEOUTS, true); // True if Storm should timeout messages or not.
@@ -92,14 +93,15 @@ public class E3_MultipleFeaturesTopology {
 		try {
 			
 			// run in local mode
+			/*
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology( "multifeature", conf, builder.createTopology() );
 			Utils.sleep(120*1000); // run two minutes and then kill the topology
 			cluster.shutdown();
 			System.exit(1);
-			
+			*/
 			// run on a storm cluster
-			// StormSubmitter.submitTopology("some_topology_name", conf, builder.createTopology());
+			StormSubmitter.submitTopology("multifeature", conf, builder.createTopology());
 		} catch (Exception e){
 			e.printStackTrace();
 		}
