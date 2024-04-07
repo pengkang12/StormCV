@@ -8,6 +8,13 @@ export XUGGLE_HOME=$HOME/xuggler
 export PATH=$XUGGLE_HOME/bin:$PATH    
 export LD_LIBRARY_PATH=$XUGGLE_HOME/lib:$LD_LIBRARY_PATH
 
+# download xuggle-xuggler github
+git clone https://github.com/artclarke/xuggle-xuggler
+git cd xuggle-xuggler
+
+# copy xugle-xuggler.path to xuggle-xuggler folder
+git apply xuggle-xuggler.patch 
+
 ant -Dbuild.configure.os=aarch64-unknown-linux-gnu stage
 ant -Dbuild.configure.os=aarch64-unknown-linux-gnu install
 
