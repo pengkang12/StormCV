@@ -2,6 +2,19 @@
 # then run following command
 # download ivy-2.0.0.jar file to current folder
 
+# important reference 
+https://stackoverflow.com/questions/25218879/guide-to-compile-xuggler-for-raspberry-pi
+
+Sun Java 1.6 or higher JDK
+Ant 1.7 or higher
+Perl 5.6 or higher
+gcc/g++ 3.2 or higher
+gmake 3.81 or higher
+Yasm 0.7 or higher
+pkg-config 0.26 or higher
+Internet Access. The first time you build Xuggler it will download some required .jar files using Ivy.
+Make sure you create a directory for $XUGGLE_HOME if you've defined it.
+
 # xuggle-xuggler is the source code folder
 
 export XUGGLE_HOME=$HOME/xuggler    

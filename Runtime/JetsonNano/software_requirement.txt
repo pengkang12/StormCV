@@ -6,7 +6,8 @@ compile tools:
     python=2.7.17
     g++=7.5
     gcc=7.5
-    java=8 # don't use a higher version. It will cause some error unless you want to update all code. 
+    sudo apt install g++-7 gcc-7
+    Java 8, openjdk-8-jdk openjdk-8-jre # don't use openjdk-8-jdk-headless and openjdk-8-jre-headless 
     xuggle=5.5 # latest version, discontinued
     opencv=2.4x
     opencv_extra=2.4x

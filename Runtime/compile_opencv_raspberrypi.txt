@@ -1,6 +1,9 @@
 OS:
     ubuntu 20.04
 
+# Install java
+apt install openjdk-8-jdk openjdk-8-jre -y
+
 # Download Python2.7.18
 sudo apt-get update
 sudo apt-get install build-essential
@@ -29,8 +32,12 @@ git clone https://github.com/numpy/numpy.git
 cd numpy
 
 # Checkout the desired version (e.g., version 1.20.3)
-git checkout v1.20.3
+sudo apt-get install python-setuptools
+wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+python get-pip.py
+python -m pip install cython
 
 # Install NumPy from source
 python setup.py install
 
+cmake -DBUILD_SHARED_LIBS=OFF -DLIB_SUFFIX=64 -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=OFF -DBUILD_JPEG=ON -DBUILD_OPENEXR=OFF -DBUILD_PNG=ON -DBUILD_TBB=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_FAT_JAVA_LIB=ON  -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_1394=OFF -DWITH_FFMPEG=ON -DWITH_GSTREAMER=ON -DWITH_V4L=ON -DWITH_TBB=ON -DWITH_IPP=OFF -DWITH_CUDA=OFF -DWITH_OPENCL=OFF WITH_OPENGL=OFF -D WITH_QT=OFF -DBUILD_WITH_DEBUG_INFO=OFF -D WITH_TBB=OFF -D BUILD_TBB=OFF  ..
