@@ -41,6 +41,23 @@ bin/storm ui &
 bin/storm supervisor &
 ```
 
+# set swap file
+
+# creates a 1GB swap file
+```
+sudo dd if=/dev/zero of=/swapfile bs=1M count=1024
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+# To ensure the swap file is activated automatically at boot, you need to add an entry in the /etc/fstab file. Open the file in a text editor:
+```
+sudo nano /etc/fstab
+```
+add the following content:
+```
+/swapfile  none  swap  sw  0  0
+```
 # install StormCV
 
 git clone https://github.com/pengkang12/StormCV.git
