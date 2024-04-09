@@ -1,0 +1,177 @@
+diff --git a/captive/configure b/captive/configure
+index 1c39a4976..ad12c0b45 100755
+--- a/captive/configure
++++ b/captive/configure
+@@ -11578,6 +11578,7 @@ CC="$lt_save_CC"
+ # I hate building on Mac even more than windows; really; it's hard to explain my loathing
+ CFLAGS="${CFLAGS}"
+ CXXFLAGS="${CXXFLAGS}"
++CXXFLAGS+="-Wno-error"
+ LDFLAGS="${LDFLAGS}"
+ ASFLAGS="${ASFLAGS}"
+ case $host_os in
+diff --git a/captive/libspeex/csrc/configure b/captive/libspeex/csrc/configure
+index 1e832d417..a845cb6df 100755
+--- a/captive/libspeex/csrc/configure
++++ b/captive/libspeex/csrc/configure
+@@ -12982,7 +12982,7 @@ if test "${enable_sse+set}" = set; then :
+   enableval=$enable_sse;
+ if test "x$enableval" != xno; then
+ has_sse=yes
+-CFLAGS="$CFLAGS -O3 -msse"
++CFLAGS="$CFLAGS -O3"
+ else
+ has_sse=no
+ fi
+@@ -13013,11 +13013,11 @@ $as_echo "#define FLOATING_POINT /**/" >>confdefs.h
+ fi
+ 
+ 
+-if test "$has_sse" = yes; then
++#if test "$has_sse" = yes; then
+ 
+-$as_echo "#define _USE_SSE /**/" >>confdefs.h
++#$as_echo "#define _USE_SSE /**/" >>confdefs.h
+ 
+-fi
++#fi
+ 
+ # Check whether --enable-float-api was given.
+ if test "${enable_float_api+set}" = set; then :
+diff --git a/captive/libspeex/csrc/configure.ac b/captive/libspeex/csrc/configure.ac
+index 6677f2a66..ec3f12198 100644
+--- a/captive/libspeex/csrc/configure.ac
++++ b/captive/libspeex/csrc/configure.ac
+@@ -143,7 +143,7 @@ fi])
+ AC_ARG_ENABLE(sse, [  --enable-sse            Enable SSE support], [
+ if test "x$enableval" != xno; then
+ has_sse=yes
+-CFLAGS="$CFLAGS -O3 -msse"
++CFLAGS="$CFLAGS -O3"
+ else
+ has_sse=no
+ fi
+@@ -162,9 +162,9 @@ else
+ fi],
+ AC_DEFINE([FLOATING_POINT], , [Compile as floating-point]))
+ 
+-if test "$has_sse" = yes; then
+-  AC_DEFINE([_USE_SSE], , [Enable SSE support])
+-fi
++#if test "$has_sse" = yes; then
++#  AC_DEFINE([_USE_SSE], , [Enable SSE support])
++#fi
+ 
+ AC_ARG_ENABLE(float-api, [  --disable-float-api     Disable the floating-point API],
+ [if test "$enableval" = no; then
+diff --git a/captive/libvpx/csrc/nestegg/halloc/src/align.h b/captive/libvpx/csrc/nestegg/halloc/src/align.h
+index 4c6e1831f..34f55e0ad 100644
+--- a/captive/libvpx/csrc/nestegg/halloc/src/align.h
++++ b/captive/libvpx/csrc/nestegg/halloc/src/align.h
+@@ -30,7 +30,7 @@ union max_align
+ 	void (*q)(void);
+ };
+ 
+-typedef union max_align max_align_t;
++typedef union max_align max_align_tt;
+ 
+ #endif
+ 
+diff --git a/captive/libvpx/csrc/nestegg/halloc/src/halloc.c b/captive/libvpx/csrc/nestegg/halloc/src/halloc.c
+index 38fd6c11a..ba6eac6c6 100644
+--- a/captive/libvpx/csrc/nestegg/halloc/src/halloc.c
++++ b/captive/libvpx/csrc/nestegg/halloc/src/halloc.c
+@@ -30,7 +30,7 @@ typedef struct hblock
+ #endif
+ 	hlist_item_t  siblings; /* 2 pointers */
+ 	hlist_head_t  children; /* 1 pointer  */
+-	max_align_t   data[1];  /* not allocated, see below */
++	max_align_tt   data[1];  /* not allocated, see below */
+ 	
+ } hblock_t;
+ 
+diff --git a/captive/libx264/incarcerate.in b/captive/libx264/incarcerate.in
+index 17293624f..674c69e86 100755
+--- a/captive/libx264/incarcerate.in
++++ b/captive/libx264/incarcerate.in
+@@ -19,6 +19,8 @@ fi
+ # Tell X264 about the captive libraries already built and fake
+ # installed
+ 
++X264_OPTIONS="$X264_OPTIONS --disable-asm"
++X264_OPTIONS="$X264_OPTIONS --enable-shared"
+ X264_OPTIONS="$X264_OPTIONS --enable-static"
+ X264_OPTIONS="$X264_OPTIONS --enable-pic"
+ 
+diff --git a/configure b/configure
+index 115acb549..b54380081 100755
+--- a/configure
++++ b/configure
+@@ -2720,7 +2720,7 @@ fi
+ ## -------------------- ##
+ ## Main body of script. ##
+ ## -------------------- ##
+-
++CPPFLAGS+="-Wno-narrowing"
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+@@ -12049,6 +12049,7 @@ CC="$lt_save_CC"
+ # I hate building on Mac even more than windows; really; it's hard to explain my loathing
+ CFLAGS="${CFLAGS}"
+ CXXFLAGS="${CXXFLAGS}"
++CXXFLAGS+="-Wno-error"
+ LDFLAGS="${LDFLAGS}"
+ ASFLAGS="${ASFLAGS}"
+ case $host_os in
+@@ -12870,6 +12871,7 @@ else
+     CXXFLAGS=
+   fi
+ fi
++CXXFLAGS += -Wno-error
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+@@ -13126,6 +13128,7 @@ $RM -r conftest*
+   test -z "${LDCXX+set}" || LD=$LDCXX
+   CC=${CXX-"c++"}
+   CFLAGS=$CXXFLAGS
++  CXXFLAGS += -Wno-error
+   compiler=$CC
+   compiler_CXX=$CC
+   for cc_temp in $compiler""; do
+@@ -16449,7 +16452,7 @@ case $host in
+   HOST_TYPE=Linux
+   ;;
+ esac
+-enable_warningerrors=yes
++enable_warningerrors=no
+ case $HOST_TYPE in
+   Windows)
+   HOST_SO_LIBPATH=PATH
+diff --git a/csrc/com/xuggle/xuggler/Codec.cpp b/csrc/com/xuggle/xuggler/Codec.cpp
+index a3788a338..d558e2fc4 100644
+--- a/csrc/com/xuggle/xuggler/Codec.cpp
++++ b/csrc/com/xuggle/xuggler/Codec.cpp
+@@ -155,7 +155,7 @@ namespace com { namespace xuggle { namespace xuggler
+   bool
+   Codec :: canDecode()
+   {
+-    return mCodec ? mCodec->decode : false;
++    return mCodec ? (bool) mCodec->decode : false;
+   }
+ 
+   bool
+diff --git a/mk/buildtools/buildhelper.xml b/mk/buildtools/buildhelper.xml
+index bc6be39cb..34a867aa3 100644
+--- a/mk/buildtools/buildhelper.xml
++++ b/mk/buildtools/buildhelper.xml
+@@ -104,7 +104,7 @@
+   </condition>
+ 
+   <property name="ivy.lib.dir" value="${build.dir}/lib"/>
+-  <property name="ivy.version" value="ivy-2.2.0" />
++  <property name="ivy.version" value="ivy-2.4.0" />
+   <property name="ivy.retrieve.pattern" value="${ivy.lib.dir}/[conf]/[artifact].[ext]" />
+   <property name="ivy.distrib.dir" value="${dist.dir}"/>
+   <!-- You can set the variable XUGGLE_REPO in which case ivy will publish
