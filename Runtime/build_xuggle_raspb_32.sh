@@ -29,4 +29,4 @@ mv ivy-2.4.0.jar mk/buildtools/lib/
 
 git apply raspberrypi_32_xuggle.patch
 ant stage
-
+sudo ant install
