@@ -22,6 +22,9 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 10
 
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 10
 
+export XUGGLE_HOME=$HOME/xuggler
+export PATH=$XUGGLE_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$XUGGLE_HOME/lib:$LD_LIBRARY_PATH
 
 cd xuggle-xuggler
 wget wget https://repo1.maven.org/maven2/org/apache/ivy/ivy/2.4.0/ivy-2.4.0.jar
