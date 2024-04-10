@@ -44,7 +44,7 @@
 		</repository>
 		<repository>
 			<id>xuggle repo</id>
-			<url>file:///home/jetson/.m2/repository/</url>
+			<url>file:///home/cc/.m2/repository/</url>
 			<!--
 				<url>https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
 			-->
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>xuggle</groupId>
 			<artifactId>xuggle-xuggler</artifactId>
-			<version>5.5</version>
+			<version>5.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
