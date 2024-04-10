@@ -65,3 +65,9 @@ sudo apt install maven
 
 # Run StormCV application
 bash StormCV/run.sh
+
+# troubleshooting
+Sometimes, if java crashed, please run the following command:
+```
+ulimit -c unlimited
+```

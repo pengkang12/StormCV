@@ -1,7 +1,7 @@
-# build xuggle 
+# step1: build xuggle 
 
-# build opencv
+# step2: build opencv
 
-# build apache storm
+# step3: build apache storm
 
-# build StormCV and run
+# step4: build StormCV and run
