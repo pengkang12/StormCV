@@ -1,4 +1,5 @@
-***We rebuild this project at Jetson NANO (JetPack 4.6.1) and Raspberry Pi 4 (ubuntu 20.04). ***
+
+**We rebuild this project at Jetson Nano (JetPack 4.6.1) and Raspberry Pi 4 (Ubuntu 20.04 32bits)**
 
 ***Unfortunately, this project does not build anymore because the video reader it depends on (Xuggle) has been discontinued. Another video reader, like [Humble-Video](https://github.com/artclarke/humble-video), must be integrated in order for StormCV to work again.***
 
