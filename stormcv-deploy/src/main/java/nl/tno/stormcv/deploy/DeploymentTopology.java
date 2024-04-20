@@ -65,7 +65,7 @@ public static void main(String[] args){
 		// specify the list with SingleInputOperations to be executed sequentially by the 'fat' bolt
 		@SuppressWarnings("rawtypes")
 		List<ISingleInputOperation> operations = new ArrayList<ISingleInputOperation>();
-		operations.add(new ScaleImageOp(0.5f) );
+		operations.add(new ScaleImageOp(0.1f) );
 		operations.add(new FeatureExtractionOp("sift", FeatureDetector.SIFT, DescriptorExtractor.SIFT));
 		operations.add(new FeatureExtractionOp("surf", FeatureDetector.SURF, DescriptorExtractor.SURF));
 		operations.add(new DrawFeaturesOp());
@@ -75,7 +75,7 @@ public static void main(String[] args){
 				
 		// number of tasks must match the number of urls!
 		// builder.setSpout("spout", new CVParticleSpout( new StreamFrameFetcher(urls).frameSkip(frameSkip) ), 1 ).setNumTasks(6);
-		builder.setSpout("spout", new CVParticleSpout( new FileFrameFetcher(urls).frameSkip(frameSkip)), 2 ).setNumTasks(1);
+		builder.setSpout("spout", new CVParticleSpout( new FileFrameFetcher(urls).frameSkip(frameSkip)), 1 ).setNumTasks(1);
 
 
 		// three 'fat' bolts containing a SequentialFrameOperation will will emit a Frame object containing the detected features
